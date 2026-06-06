@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BarberShop Catálogo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<header class="navbar">
+  <div class="nav-inner">
+    <div class="brand">
+      <span class="brand-icon">✂</span>
+      <div>
+        <span class="brand-name">BarberShop</span>
+        <span class="brand-sub">Catálogo Profesional</span>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#contacto">Contacto</a>
+      <button class="btn-admin-toggle" id="adminToggleBtn" onclick="openAdminLogin()">⚙ Admin</button>
+    </nav>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#catalogo" onclick="closeMobileMenu()">Catálogo</a>
+    <a href="#contacto" onclick="closeMobileMenu()">Contacto</a>
+    <button onclick="openAdminLogin(); closeMobileMenu()">⚙ Admin</button>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Productos Profesionales</p>
+    <h1 class="hero-title">El Arte del<br/><em>Barbero Moderno</em></h1>
+    <p class="hero-desc">Herramientas y productos de alta calidad para el barbero profesional. Envío a toda Colombia.</p>
+    <a href="#catalogo" class="btn-hero">Ver Catálogo</a>
+  </div>
+  <div class="hero-deco">
+    <div class="deco-circle c1"></div>
+    <div class="deco-circle c2"></div>
+    <div class="deco-scissors">✂</div>
+  </div>
+</section>
+
+<!-- ===== FILTERS ===== -->
+<section class="filters-section" id="catalogo">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Nuestros Productos</h2>
+      <p class="section-sub">Calidad profesional para tu barbería</p>
+    </div>
+    <div class="filter-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Buscar producto..." oninput="filterProducts()"/>
+      </div>
+      <div class="category-pills" id="categoryPills">
+        <button class="pill active" onclick="setCategory('todos', this)">Todos</button>
+      </div>
+      <select id="sortSelect" onchange="filterProducts()">
+        <option value="default">Ordenar por</option>
+        <option value="price-asc">Precio: menor a mayor</option>
+        <option value="price-desc">Precio: mayor a menor</option>
+        <option value="name">Nombre A-Z</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCT GRID ===== -->
+<section class="catalog-section">
+  <div class="container">
+    <div class="product-grid" id="productGrid">
+      <!-- Products injected by JS -->
+    </div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <span class="empty-icon">✂</span>
+      <p>No se encontraron productos</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="contact-section" id="contacto">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="contact-text">
+        <h2>¿Tienes alguna pregunta?</h2>
+        <p>Escríbenos para cotizaciones al por mayor o información de productos.</p>
+        <div class="contact-items">
+          <div class="contact-item">📱 <span>WhatsApp: +57 300 000 0000</span></div>
+          <div class="contact-item">📧 <span>info@barbershop.com</span></div>
+          <div class="contact-item">📍 <span>Colombia — Envíos Nacionales</span></div>
+        </div>
+      </div>
+      <div class="contact-badge">
+        <span class="badge-icon">✂</span>
+        <p>Más de <strong>30 productos</strong> disponibles</p>
+        <p>Envío en <strong>24-48 horas</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© 2026 BarberShop Catálogo · Todos los derechos reservados</p>
+</footer>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="modal-overlay" id="productModal" onclick="closeProductModal(event)">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeProductModal()">✕</button>
+    <div class="modal-img-wrap">
+      <img id="modalImg" src="" alt=""/>
+    </div>
+    <div class="modal-info">
+      <span class="modal-badge" id="modalCategory"></span>
+      <h2 id="modalName"></h2>
+      <p class="modal-desc-text" id="modalDesc"></p>
+      <div class="modal-price-row">
+        <span class="modal-price" id="modalPrice"></span>
+        <span class="modal-old-price" id="modalOldPrice"></span>
+        <span class="modal-discount" id="modalDiscount"></span>
+      </div>
+      <div class="modal-stock" id="modalStock"></div>
+      <a class="btn-whatsapp" id="modalWhatsapp" href="#" target="_blank">
+        📱 Pedir por WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN LOGIN MODAL ===== -->
+<div class="modal-overlay" id="loginModal" onclick="closeLoginModal(event)">
+  <div class="login-card">
+    <button class="modal-close" onclick="closeLoginModal()">✕</button>
+    <h2>Acceso Administrador</h2>
+    <p class="login-sub">Ingresa tus credenciales</p>
+    <div class="form-group">
+      <label>Usuario</label>
+      <input type="text" id="loginUser" placeholder="admin"/>
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="loginPass" placeholder="••••••"/>
+    </div>
+    <p class="login-error" id="loginError"></p>
+    <button class="btn-login" onclick="doLogin()">Ingresar</button>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-header">
+    <div>
+      <h2>Panel de Administración</h2>
+      <span class="admin-sub">Gestiona los productos del catálogo</span>
+    </div>
+    <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+  </div>
+
+  <div class="admin-body">
+    <!-- Formulario producto -->
+    <div class="admin-form-card">
+      <h3 id="formTitle">➕ Nuevo Producto</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre *</label>
+          <input type="text" id="fName" placeholder="Ej: Máquina Barber T9"/>
+        </div>
+        <div class="form-group">
+          <label>Categoría *</label>
+          <input type="text" id="fCategory" placeholder="Ej: Máquinas, Cuchillas..."/>
+        </div>
+        <div class="form-group">
+          <label>Precio (COP) *</label>
+          <input type="number" id="fPrice" placeholder="44000"/>
+        </div>
+        <div class="form-group">
+          <label>Precio original (tachado)</label>
+          <input type="number" id="fOldPrice" placeholder="88000"/>
+        </div>
+        <div class="form-group">
+          <label>Stock disponible</label>
+          <input type="number" id="fStock" placeholder="10"/>
+        </div>
+        <div class="form-group">
+          <label>WhatsApp (número sin +)</label>
+          <input type="text" id="fWhatsapp" placeholder="573001234567"/>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>Descripción</label>
+        <textarea id="fDesc" rows="3" placeholder="Describe el producto, características, incluye..."></textarea>
+      </div>
+      <div class="form-group full">
+        <label>Imagen del producto</label>
+        <div class="img-upload-area" id="imgUploadArea" onclick="document.getElementById('imgInput').click()">
+          <div class="img-preview-wrap" id="imgPreviewWrap" style="display:none">
+            <img id="imgPreview" src="" alt="preview"/>
+          </div>
+          <div class="img-placeholder" id="imgPlaceholder">
+            <span>📷</span>
+            <p>Haz clic para subir imagen</p>
+            <small>JPG, PNG, WEBP · Máx 5MB</small>
+          </div>
+        </div>
+        <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="handleImageUpload(event)"/>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" onclick="saveProduct()">💾 Guardar Producto</button>
+        <button class="btn-cancel" onclick="resetForm()">✕ Cancelar</button>
+      </div>
+    </div>
+
+    <!-- Lista de productos admin -->
+    <div class="admin-list-card">
+      <div class="admin-list-header">
+        <h3>📦 Productos (<span id="adminCount">0</span>)</h3>
+        <input type="text" id="adminSearch" placeholder="Buscar..." oninput="renderAdminList()"/>
+      </div>
+      <div class="admin-product-list" id="adminProductList">
+        <!-- Injected -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN FLOATING BUTTON (when logged in) ===== -->
+<button class="fab-admin" id="fabAdmin" style="display:none" onclick="toggleAdminPanel()">⚙</button>
+
+<script src="app.js"></script>
+</body>
+</html>
